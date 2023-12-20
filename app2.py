@@ -52,7 +52,7 @@ selected = option_menu(
 if selected == "Data Entry":
     st.header(f"Data Entry")
     with st.form("entry_form", clear_on_submit=True):
-        col1 == st.columns(1)
+        col1 = st.columns(1)
         col1.selectbox("Select Month:", months, key="month")
 
         "---"
