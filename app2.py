@@ -58,17 +58,15 @@ if selected == "Data Entry":
         "---"
         with st.expander("Personal Specifications"):
             for i in personal:
-                st.number_input(f"{i}:", min_value=0, format="%i", step=10, key=personal)
-        with st.expander("Diet"):
+                st.number_input(f"{i}:", min_value=0, format="%i", step=1, key=personal)
+        with st.expander("Diet (in grams)"):
             for diet in diets:
                 st.number_input(f"{diet}:", min_value=0, format="%i", step=10, key=diets)
-        #with st.expander("Comment"):
-            #comment = st.text_area("", placeholder="Enter a comment here ...")
 
         "---"
         submitted = st.form_submit_button("Save Data")
         if submitted:
-            period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
             personal = {Personals: st.session_state[i] for i in personal}
             diets = {expense: st.session_state[diet] for diet in diets}
             db.insert_period(period, personal, diets)
