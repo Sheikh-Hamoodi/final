@@ -8,11 +8,10 @@ from streamlit_option_menu import option_menu  # pip install streamlit-option-me
 
 
 # -------------- SETTINGS --------------
-incomes = ["Salary", "Blog", "Other Income"]
-expenses = ["Rent", "Utilities", "Groceries", "Car", "Other Expenses", "Saving"]
-currency = "USD"
-page_title = "Income and Expense Tracker"
-page_icon = ":money_with_wings:"  # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
+personal = ["Height (m)", "Weight (kg)", "Age"]
+diet = ["Salt intake", "Fibre intake", "Caffeine intake"]
+page_title = "Hydration Tracker"
+page_icon = ":potable_water:"  # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 layout = "centered"
 # --------------------------------------
 
@@ -51,14 +50,14 @@ selected = option_menu(
 
 # --- INPUT & SAVE PERIODS ---
 if selected == "Data Entry":
-    st.header(f"Data Entry in {currency}")
+    st.header(f"Data Entry")
     with st.form("entry_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
         col1.selectbox("Select Month:", months, key="month")
         col2.selectbox("Select Year:", years, key="year")
 
         "---"
-        with st.expander("Income"):
+        with st.expander("Personal Specifications"):
             for income in incomes:
                 st.number_input(f"{income}:", min_value=0, format="%i", step=10, key=income)
         with st.expander("Expenses"):
@@ -95,9 +94,9 @@ if selected == "Data Visualization":
             total_expense = sum(expenses.values())
             remaining_budget = total_income - total_expense
             col1, col2, col3 = st.columns(3)
-            col1.metric("Total Income", f"{total_income} {currency}")
-            col2.metric("Total Expense", f"{total_expense} {currency}")
-            col3.metric("Remaining Budget", f"{remaining_budget} {currency}")
+            col1.metric("Total Income", f"{total_income}")
+            col2.metric("Total Expense", f"{total_expense}")
+            col3.metric("Remaining Budget", f"{remaining_budget}")
             st.text(f"Comment: {comment}")
 
             # Create sankey chart
