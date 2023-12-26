@@ -22,6 +22,9 @@ st.title(page_title + " " + page_icon)
 #years = [datetime.today().year, datetime.today().year + 1]
 #months = list(calendar.month_name[1:])
 
+interval = ["Daily", "Weekly"]
+exercise = [i for i in range(1,11)]
+
 
 # --- DATABASE INTERFACE ---
 def get_all_periods():
@@ -52,8 +55,9 @@ selected = option_menu(
 if selected == "Data Entry":
     st.header(f"Data Entry")
     with st.form("entry_form", clear_on_submit=True):
-        #col1 = st.columns(1)
-        #col1.selectbox("Select Month:", months, key="month")
+        col1, col2 = st.columns(2)
+        col1.selectbox("Select Interval:", interval, key="intervals")
+        col2.selectbox("Select Exercise intensity (1-10):", exercise, key="intensity")
 
         "---"
         with st.expander("Personal Specifications"):
@@ -68,9 +72,14 @@ if selected == "Data Entry":
         submitted = st.form_submit_button()
         if submitted:
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
+            interval_value = st.session_state["intervals"]
+            intensity_value = st.session_state["intensity"]
             personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
             diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
-            st.write(f"Personals: {personal_data}\nDiet: {diet_data}")
+            st.write(f"Interval: {interval_value}")
+            st.write(f"Exercise intensity: {intensity_value}")
+            st.write(f"Personals: {personal_data}")
+            st.write(f"Diet: {diet_data}")
             #db.insert_period(period, personal_data, diet_data)
             st.success("Data saved!")
 
