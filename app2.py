@@ -70,7 +70,8 @@ if selected == "Data Entry":
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
             personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
             diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
-            db.insert_period(period, personal_data, diet_data)
+            st.write(f"Personals: {personal_data}\nDiet: {diet_data}")
+            #db.insert_period(period, personal_data, diet_data)
             st.success("Data saved!")
 
 
