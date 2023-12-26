@@ -58,7 +58,7 @@ if selected == "Data Entry":
         "---"
         with st.expander("Personal Specifications"):
             for i, item in enumerate(personal):
-                st.number_input(f"{item}:", min_value=0, format="%i", step=1, key=f"{item}_{i}")
+                st.number_input(f"{item}:", min_value=0, format="%i", step=0.1, key=f"{item}_{i}")
         
         with st.expander("Diet (in grams)"):
             for j, diet in enumerate(diets):
