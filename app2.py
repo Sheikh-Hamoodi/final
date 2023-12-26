@@ -57,7 +57,7 @@ if selected == "Data Entry":
 
         "---"
         with st.expander("Personal Specifications"):
-            for i, item in enumerate(personal):
+            for i, item in enumerate(personals):
                 st.number_input(f"{item}:", min_value=0, format="%i", step=0.1, key=f"{item}_{i}")
         
         with st.expander("Diet (in grams)"):
@@ -69,7 +69,7 @@ if selected == "Data Entry":
         if submitted:
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
             personal = {Personal: st.session_state[i] for i in personal}
-            diets = {expense: st.session_state[diet] for diet in diets}
+            diets = {Diet: st.session_state[diet] for diet in diets}
             db.insert_period(period, personal, diets)
             st.success("Data saved!")
 
