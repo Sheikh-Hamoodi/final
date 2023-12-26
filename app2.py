@@ -10,7 +10,7 @@ from streamlit_option_menu import option_menu  # pip install streamlit-option-me
 # -------------- SETTINGS --------------
 personal = ["Height (m)", "Weight (kg)", "Age"]
 diets = ["Salt intake", "Fibre intake", "Caffeine intake"]
-page_title = "H1ydration Tracker"
+page_title = "Hydration Tracker"
 page_icon = ":potable_water:"  # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 layout = "centered"
 # --------------------------------------
