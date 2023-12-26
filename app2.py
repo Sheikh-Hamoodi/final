@@ -57,11 +57,12 @@ if selected == "Data Entry":
 
         "---"
         with st.expander("Personal Specifications"):
-            for i in personal:
-                st.number_input(f"{i}:", min_value=0, format="%i", step=1, key=personal)
+            for i, item in enumerate(personal):
+                st.number_input(f"{item}:", min_value=0, format="%i", step=1, key=f"{item}_{i}")
+        
         with st.expander("Diet (in grams)"):
-            for diet in diets:
-                st.number_input(f"{diet}:", min_value=0, format="%i", step=10, key=diets)
+            for j, diet in enumerate(diets):
+                st.number_input(f"{diet}:", min_value=0, format="%i", step=10, key=f"{diet}_{j}")
 
         "---"
         submitted = st.form_submit_button()
