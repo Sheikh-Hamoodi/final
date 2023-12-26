@@ -68,9 +68,9 @@ if selected == "Data Entry":
         submitted = st.form_submit_button()
         if submitted:
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
-            personals = {Personal: st.session_state[Personal] for Personal in personals}
-            diets = {Diet: st.session_state[Diet] for Diet in diets}
-            db.insert_period(period, personal, diets)
+            personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
+            diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
+            db.insert_period(period, personal_data, diet_data)
             st.success("Data saved!")
 
 
