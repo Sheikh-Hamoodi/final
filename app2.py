@@ -64,7 +64,7 @@ if selected == "Data Entry":
                 st.number_input(f"{diet}:", min_value=0, format="%i", step=10, key=diets)
 
         "---"
-        submitted = st.form_submit_button("Save Data")
+        submitted = st.form_submit_button()
         if submitted:
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
             personal = {Personals: st.session_state[i] for i in personal}
