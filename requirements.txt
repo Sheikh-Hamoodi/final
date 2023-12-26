@@ -43,7 +43,7 @@ simpy==4.0.2
 six==1.16.0
 smmap==5.0.1
 statsmodels==0.14.0
-streamlit==1.27.2
+streamlit==1.25.0
 streamlit-option-menu==0.3.6
 tenacity==8.2.3
 toml==0.10.2
