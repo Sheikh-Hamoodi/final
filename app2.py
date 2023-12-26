@@ -68,8 +68,8 @@ if selected == "Data Entry":
         submitted = st.form_submit_button()
         if submitted:
             #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
-            personals = {Personal: st.session_state[i] for Personal in personals}
-            diets = {Diet: st.session_state[diet] for Diet in diets}
+            personals = {Personal: st.session_state[Personal] for Personal in personals}
+            diets = {Diet: st.session_state[Diet] for Diet in diets}
             db.insert_period(period, personal, diets)
             st.success("Data saved!")
 
