@@ -1,15 +1,14 @@
-import calendar  # Core Python Module
-from datetime import datetime  # Core Python Module
-
 import plotly.graph_objects as go  # pip install plotly
 import streamlit as st  # pip install streamlit
 from streamlit_option_menu import option_menu  # pip install streamlit-option-menu
 
+import database as db
+from database import insert_period, fetch_all_periods, get_period
 
 
 # -------------- SETTINGS --------------
-personals = ["Height (cm)", "Weight (kg)", "Age"]
-diets = ["Salt intake", "Fibre intake", "Caffeine intake"]
+personals = ["Height", "Weight", "Age"]
+diets = ["Salt", "Fibre", "Caffeine"]
 page_title = "Hydration Tracker"
 page_icon = ":potable_water:"  # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 layout = "centered"
@@ -18,11 +17,8 @@ layout = "centered"
 st.set_page_config(page_title=page_title, page_icon=page_icon, layout=layout)
 st.title(page_title + " " + page_icon)
 
-# --- DROP DOWN VALUES FOR SELECTING THE PERIOD ---
-#years = [datetime.today().year, datetime.today().year + 1]
-#months = list(calendar.month_name[1:])
 
-interval = ["Daily", "Weekly"]
+day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 exercise = [i for i in range(1,11)]
 
 
@@ -56,7 +52,7 @@ if selected == "Data Entry":
     st.header(f"Data Entry")
     with st.form("entry_form", clear_on_submit=True):
         col1, col2 = st.columns(2)
-        col1.selectbox("Select Interval:", interval, key="intervals")
+        col1.selectbox("Select Day:", day, key="days")
         col2.selectbox("Select Exercise intensity (1-10):", exercise, key="intensity")
 
         "---"
@@ -71,54 +67,18 @@ if selected == "Data Entry":
         "---"
         submitted = st.form_submit_button()
         if submitted:
-            #period = str(st.session_state["year"]) + "_" + str(st.session_state["month"])
-            interval_value = st.session_state["intervals"]
+            day_value = st.session_state["days"]
             intensity_value = st.session_state["intensity"]
             personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
             diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
-            st.write(f"Interval: {interval_value}")
+            st.write(f"Day: {day_value}")
             st.write(f"Exercise intensity: {intensity_value}")
             st.write(f"Personals: {personal_data}")
             st.write(f"Diet: {diet_data}")
-            #db.insert_period(period, personal_data, diet_data)
+            db.insert_period(day, personal_data, diet_data)
             st.success("Data saved!")
 
 
 # --- PLOT PERIODS ---
 if selected == "Data Visualization":
     st.header("Under construction")
-    #with st.form("saved_periods"):
-     #   period = st.selectbox("Select Period:", get_all_periods())
-      #  submitted = st.form_submit_button("Plot Period")
-       # if submitted:
-        #    # Get data from database
-         #   period_data = db.get_period(period)
-          #  comment = period_data.get("comment")
-           # expenses = period_data.get("expenses")
-            #incomes = period_data.get("incomes")
-#
- #           # Create metrics
-  #          total_income = sum(incomes.values())
-   #         total_expense = sum(expenses.values())
-    #        remaining_budget = total_income - total_expense
-     #       col1, col2, col3 = st.columns(3)
-      #      col1.metric("Total Income", f"{total_income}")
-       #     col2.metric("Total Expense", f"{total_expense}")
-        #    col3.metric("Remaining Budget", f"{remaining_budget}")
-         #   st.text(f"Comment: {comment}")
-#
- #           # Create sankey chart
-  #          label = list(incomes.keys()) + ["Total Income"] + list(expenses.keys())
-   #         source = list(range(len(incomes))) + [len(incomes)] * len(expenses)
-    #        target = [len(incomes)] * len(incomes) + [label.index(expense) for expense in expenses.keys()]
-     #       value = list(incomes.values()) + list(expenses.values())
-#
- #           # Data to dict, dict to sankey
-  #          link = dict(source=source, target=target, value=value)
-   #         node = dict(label=label, pad=20, thickness=30, color="#E694FF")
-    #        data = go.Sankey(link=link, node=node)
-#
- #           # Plot it!
-  #          fig = go.Figure(data)
-   #         fig.update_layout(margin=dict(l=0, r=0, t=5, b=5))
-    #        st.plotly_chart(fig, use_container_width=True)
