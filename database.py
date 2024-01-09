@@ -1,5 +1,6 @@
 import streamlit as st  # pip install streamlit
 from deta import Deta  # pip install deta
+import serial
 
 
 # Load the environment variables
@@ -26,6 +27,9 @@ def fetch_all_periods():
 def get_period(day):
     """If not found, the function will return None"""
     return db.get(day)
+
+def micro():
+    
 
 def water_simulation():
     AVG_SWEAT_RATE = 0.8 # liters per hour
@@ -102,6 +106,30 @@ def water_simulation():
 
 
 
+
+ser = serial.Serial()
+ser.baudrate = 115200
+ser.port = 'COM6'
+ser.open()
+
+
+temp = []
+light = []
+
+
+csv_file_path = 'sensor_data.csv'
+
+
+while True:
+    data = ser.readline().decode('utf-8').strip()
+    temperature, light_level = map(int, data.split(','))
+
+
+    temp.append(temperature)
+    light.append(light_level)
+
+
+    print(f'Temperature: {temperature}°C, Light Level: {light_level}')
 
 
 
