@@ -1,6 +1,6 @@
 import streamlit as st  # pip install streamlit
 from deta import Deta  # pip install deta
-import serial
+
 
 
 # Load the environment variables
