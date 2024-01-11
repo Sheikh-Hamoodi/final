@@ -28,7 +28,7 @@ def get_period(day):
     """If not found, the function will return None"""
     return db.get(day)
 
-def micro():
+
     
 
 
@@ -36,29 +36,6 @@ def micro():
 
 
 
-ser = serial.Serial()
-ser.baudrate = 115200
-ser.port = 'COM6'
-ser.open()
-
-
-temp = []
-light = []
-
-
-csv_file_path = 'sensor_data.csv'
-
-
-while True:
-    data = ser.readline().decode('utf-8').strip()
-    temperature, light_level = map(int, data.split(','))
-
-
-    temp.append(temperature)
-    light.append(light_level)
-
-
-    print(f'Temperature: {temperature}°C, Light Level: {light_level}')
 
 
 
