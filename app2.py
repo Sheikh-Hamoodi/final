@@ -9,7 +9,7 @@ from database import insert_period, fetch_all_periods, get_period
 # -------------- SETTINGS --------------
 personals = ["Height", "Weight", "Age"]
 diets = ["Salt", "Fibre", "Caffeine"]
-page_title = "Hydration Tracke"
+page_title = "Hydration Tracker"
 page_icon = ":potable_water:"  # emojis: https://www.webfx.com/tools/emoji-cheat-sheet/
 layout = "centered"
 # --------------------------------------
