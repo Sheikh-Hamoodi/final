@@ -1,9 +1,10 @@
 import plotly.graph_objects as go  # pip install plotly
 import streamlit as st  # pip install streamlit
 from streamlit_option_menu import option_menu  # pip install streamlit-option-menu
+import plotly.graph_objects as go
 
 import database as db
-from database import insert_period, fetch_all_periods, get_period
+from database import insert_period, fetch_all_periods, get_period, water_simulation, get_water_drank
 
 
 # -------------- SETTINGS --------------
@@ -71,15 +72,39 @@ if selected == "Data Entry":
             intensity_value = st.session_state["intensity"]
             personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
             diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
-            st.write(f"Day: {day_value}")
-            st.write(f"Exercise intensity: {intensity_value}")
-            st.write(f"Personals: {personal_data}")
-            st.write(f"Diet: {diet_data}")
-            dummy = 25
-            db.insert_period(day_value, intensity_value, personal_data, diet_data, dummy)
+            default_temp = 25
+            init_water_drank = 0
+            db.insert_period(day_value, intensity_value, personal_data, diet_data, default_temp, init_water_drank)
             st.success("Data saved!")
 
 
 # --- PLOT PERIODS ---
 if selected == "Data Visualization":
-    st.header("Under construction")
+    #st.header("Under construction")
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    periods = fetch_all_periods()
+
+    water_goal = water_simulation()
+    water_drank = get_water_drank()
+    
+
+    #Create the main bar chart for water goals
+    fig = go.Figure()
+    
+
+    #Create a second trace for the amount of water drank
+    fig.add_trace(go.Bar(x=days, y=water_drank, name='Water Drank', marker=dict(color='lightblue')))
+    fig.add_trace(go.Bar(x=days, y=water_goal, name='Water Goal', marker=dict(color='cyan')))
+
+    # Update layout
+    fig.update_layout(
+        title='Water Consumption',
+        xaxis=dict(title='Days'),
+        yaxis=dict(title='Water (ml)'),
+        barmode='group',
+        hoverlabel=dict(font=dict(color='white'))
+    )
+
+
+    # Display the plot in Streamlit
+    st.plotly_chart(fig)
