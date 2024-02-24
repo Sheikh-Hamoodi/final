@@ -75,7 +75,8 @@ if selected == "Data Entry":
             st.write(f"Exercise intensity: {intensity_value}")
             st.write(f"Personals: {personal_data}")
             st.write(f"Diet: {diet_data}")
-            db.insert_period(day_value, intensity_value, personal_data, diet_data)
+            dummy = 25
+            db.insert_period(day_value, intensity_value, personal_data, diet_data, dummy)
             st.success("Data saved!")
 
 
