@@ -20,14 +20,20 @@ deta = Deta(DETA_KEY)
 db = deta.Base("hydration-system")
 
 
-def insert_period(day, intensity_value, personal_data, diet_data, dummy):
-    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data, "Temperature": dummy})
+def insert_period(day, intensity_value, personal_data, diet_data, default_temp, init_water_drank):
+    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data, "Temperature": default_temp, "Water Drank": init_water_drank})
 
 
 def fetch_all_periods():
     res = db.fetch()
     return res.items
 
+def get_water_drank():
+    water_drank_list = []
+    res = db.fetch()
+    for item in res.items:
+        water_drank_list.append(item["Water Drank"])
+    return water_drank_list
 
 def get_period(day):   
 
@@ -36,14 +42,6 @@ def get_period(day):
 
 
 def water_simulation():
-    
-    data = []
-    res = db.fetch()
-    data_full = res.items
-    print(data_full)
-    for entry in data_full:
-        if entry['key'].lower() == day.lower():
-            data.append(entry)
 
     # Constants
     AVG_SWEAT_RATE = 0.8 # liters per hour
@@ -53,28 +51,43 @@ def water_simulation():
     CAFFEINE_MULTIPLIER = 0.25 # liters per 100 mg of caffeine
     EXERCISE_FLUID_MULTIPLIER = 0.5 # liters per hour of exercise per level
 
-    # Inputs
-    env_temp = data[0]['Temperature'] # degrees Celsius
-    exercise_level = data[0]['Exercise Intensity']
+    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    results = []
 
-    age = data[0]['Personals']['Age'] # years
-    height = data[0]['Personals']['Height'] # cm
-    weight = data[0]['Personals']['Weight'] # kg
+    for day in days:
 
-    caffeine_intake = data[0]['Diet']['Caffeine'] # mg
-    daily_fiber = data[0]['Diet']['Fibre'] # grams
-    salt_intake = data[0]['Diet']['Salt'] # grams
+        data = []
+        res = db.fetch()
+        data_full = res.items
+        print(data_full)
+        for entry in data_full:
+            if entry['key'].lower() == day.lower():
+                data.append(entry)
 
-    print(data)
+        # Inputs
+        env_temp = data[0]['Temperature'] # degrees Celsius
+        exercise_level = data[0]['Exercise Intensity']
 
-    # Calculate BMR using Harris-Benedict equation
-    BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
+        age = data[0]['Personals']['Age'] # years
+        height = data[0]['Personals']['Height'] # cm
+        weight = data[0]['Personals']['Weight'] # kg
 
-    # Calculate sweating
-    sweating = AVG_SWEAT_RATE * env_temp * 24
+        caffeine_intake = data[0]['Diet']['Caffeine'] # mg
+        daily_fiber = data[0]['Diet']['Fibre'] # grams
+        salt_intake = data[0]['Diet']['Salt'] # grams
 
-    total_fluid_intake = sweating + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
+        print(data)
 
-    total_fluid_intake += exercise_level*100
+        # Calculate BMR using Harris-Benedict equation
+        BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
 
-    print("Total fluid intake needed:", total_fluid_intake, "ml/day")
+        # Calculate sweating
+        sweating = AVG_SWEAT_RATE * env_temp * 24
+
+        total_fluid_intake = sweating + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
+
+        total_fluid_intake += exercise_level*100
+
+        #print("Total fluid intake needed:", total_fluid_intake, "ml/day")
+        results.append(total_fluid_intake)
+    return results
