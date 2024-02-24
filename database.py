@@ -81,7 +81,7 @@ def water_simulation():
         # Calculate sweating
         sweating = AVG_SWEAT_RATE * int(env_temp) * 24
 
-        total_fluid_intake = (BMR * 0.5) +sweating + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
+        total_fluid_intake = (BMR * 0.5)  + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
 
         total_fluid_intake += exercise_level*100
 
