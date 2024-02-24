@@ -2,10 +2,13 @@ import plotly.graph_objects as go  # pip install plotly
 import streamlit as st  # pip install streamlit
 from streamlit_option_menu import option_menu  # pip install streamlit-option-menu
 import plotly.graph_objects as go
-
+from datetime import date, datetime
+import calendar
 import database as db
 from database import insert_period, fetch_all_periods, get_period, water_simulation, get_water_drank
 
+my_date = date.today()
+today = calendar.day_name[my_date.weekday()]
 
 # -------------- SETTINGS --------------
 personals = ["Height", "Weight", "Age"]
@@ -81,9 +84,12 @@ if selected == "Data Entry":
 # --- PLOT PERIODS ---
 if selected == "Data Visualization":
     days = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday', 'Wednesday']
+    today_index = days.index(today)
 
     water_goal = water_simulation()
     water_drank = get_water_drank()
+
+    difference = water_drank[today_index] - water_drank[today_index-1]
 
     #water_goal = days_sorted(water_goal1)
     #water_drank = days_sorted(water_drank1)
@@ -91,10 +97,12 @@ if selected == "Data Visualization":
     # Create the main bar chart for water goals
     fig = go.Figure()
     
+    wd_colours = ["rgba(0, 188, 212, 1)" if i == today else "rgba(0, 188, 212, 0.5)" for i in days]
+    wg_colours = ["rgba(33, 150, 243, 1)" if i == today else "rgba(33, 150, 243, 0.5)" for i in days]
 
     #Create a second trace for the amount of water drank
-    fig.add_trace(go.Bar(x=days, y=water_drank, name='Water Drank', marker=dict(color='lightblue')))
-    fig.add_trace(go.Bar(x=days, y=water_goal, name='Water Goal', marker=dict(color='cyan')))
+    fig.add_trace(go.Bar(x=days, y=water_drank, name='Water Drank', marker=dict(color=wd_colours)))
+    fig.add_trace(go.Bar(x=days, y=water_goal, name='Water Goal', marker=dict(color=wg_colours)))
 
     # Update layout
     fig.update_layout(
@@ -105,6 +113,14 @@ if selected == "Data Visualization":
         hoverlabel=dict(font=dict(color='white'))
     )
 
-
-    # Display the plot in Streamlit
+    #Display the plot in Streamlit
     st.plotly_chart(fig)
+    
+    st.write("**Recommendation**: Drink more water")
+
+    left_column, middle_column, right_column = st.columns(3)
+    with left_column:
+        st.subheader("Water Drank")
+        st.metric(label="Water drank today", value=f"{water_drank[today_index]}ml", label_visibility="collapsed", delta=f"{difference}ml from yesterday")
+
+
