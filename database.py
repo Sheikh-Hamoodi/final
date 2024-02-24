@@ -38,8 +38,6 @@ def get_water_drank():
 def get_period(day):   
 
     return db.get(day)
-    
-
 
 def water_simulation():
 
@@ -49,9 +47,8 @@ def water_simulation():
     FIBER_MULTIPLIER = 0.1 # liters per 10 grams of fiber
     SALT_MULTIPLIER = 0.6 # liters per 5 grams of salt
     CAFFEINE_MULTIPLIER = 0.25 # liters per 100 mg of caffeine
-    EXERCISE_FLUID_MULTIPLIER = 0.5 # liters per hour of exercise per level
 
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
+    days = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday', 'Wednesday']
     results = []
 
     for day in days:
@@ -84,7 +81,7 @@ def water_simulation():
         # Calculate sweating
         sweating = AVG_SWEAT_RATE * env_temp * 24
 
-        total_fluid_intake = sweating + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
+        total_fluid_intake = (BMR * 0.5) +sweating + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
 
         total_fluid_intake += exercise_level*100
 
