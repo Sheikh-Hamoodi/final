@@ -80,15 +80,15 @@ if selected == "Data Entry":
 
 # --- PLOT PERIODS ---
 if selected == "Data Visualization":
-    #st.header("Under construction")
-    days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-    periods = fetch_all_periods()
+    days = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday', 'Wednesday']
 
     water_goal = water_simulation()
     water_drank = get_water_drank()
-    
 
-    #Create the main bar chart for water goals
+    #water_goal = days_sorted(water_goal1)
+    #water_drank = days_sorted(water_drank1)
+
+    # Create the main bar chart for water goals
     fig = go.Figure()
     
 
