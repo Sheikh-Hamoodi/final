@@ -13,9 +13,9 @@ deta = Deta(DETA_KEY)
 db = deta.Base("hydration-system")
 
 
-def insert_period(day, intensity_value, personal_data, diet_data):
+def insert_period(day, intensity_value, personal_data, diet_data, dummy):
     """Returns the report on a successful creation, otherwise raises an error"""
-    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data})
+    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data, "Temperature": dummy})
 
 
 def fetch_all_periods():
