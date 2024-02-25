@@ -46,7 +46,7 @@ def water_simulation():
     URINE_OUTPUT = 1.5 # liters per day
     FIBER_MULTIPLIER = 0.1 # liters per 10 grams of fiber
     SALT_MULTIPLIER = 0.6 # liters per 5 grams of salt
-    CAFFEINE_MULTIPLIER = 0.25 # liters per 100 mg of caffeine
+    CAFFEINE_MULTIPLIER = 0.1 # liters per 100 mg of caffeine
 
     days = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday', 'Wednesday']
     results = []
@@ -56,7 +56,6 @@ def water_simulation():
         data = []
         res = db.fetch()
         data_full = res.items
-        print(data_full)
         for entry in data_full:
             if entry['key'].lower() == day.lower():
                 data.append(entry)
@@ -73,15 +72,13 @@ def water_simulation():
         daily_fiber = data[0]['Diet']['Fibre'] # grams
         salt_intake = data[0]['Diet']['Salt'] # grams
 
-        print(data)
-
         # Calculate BMR using Harris-Benedict equation
         BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
 
         # Calculate sweating
         sweating = AVG_SWEAT_RATE * int(env_temp) * 24
 
-        total_fluid_intake = (BMR * 0.5)  + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 + (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
+        total_fluid_intake = (BMR * 0.5)  + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 - (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000
 
         total_fluid_intake += exercise_level*100
 
