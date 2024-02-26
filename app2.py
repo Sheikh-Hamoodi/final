@@ -10,9 +10,7 @@ from database import insert_period, fetch_all_periods, get_period, water_simulat
 
 my_date = date.today()
 today = calendar.day_name[my_date.weekday()]
-DETA_KEY = "a0wq3cud5fq_gE78mR9NwdMaBhMQV2nUm7dfQ2VtgyGy"
-deta = Deta(DETA_KEY)
-db = deta.Base("hydration-system")
+
 
 # -------------- SETTINGS --------------
 personals = ["Height", "Weight", "Age"]
@@ -87,6 +85,9 @@ if selected == "Data Entry":
 
 # --- PLOT PERIODS ---
 if selected == "Model":
+    DETA_KEY = "a0wq3cud5fq_gE78mR9NwdMaBhMQV2nUm7dfQ2VtgyGy"
+    deta = Deta(DETA_KEY)
+    db = deta.Base("hydration-system")
     days = ['Friday', 'Monday', 'Saturday', 'Sunday', 'Thursday', 'Tuesday', 'Wednesday']
     today_index = days.index(today)
 
