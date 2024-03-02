@@ -1,5 +1,5 @@
 
-# "streamlit run [filename].py" to run locally, need wifi connection for database to work
+# "streamlit run app.py" in console to run locally, need wifi connection for database to work
 
 import plotly.graph_objects as go
 import streamlit as st
