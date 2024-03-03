@@ -137,7 +137,12 @@ if selected == "Model":
 
     water_deviation = water_drank[today_index] - water_drank[today_index-1]
     caffeine_deviation = caffeine_intake - recommendations[age_group]
-    today_water = (water_goal[today_index] - water_drank[today_index])/100
+    today_water = water_goal[today_index] - water_drank[today_index]
+
+    if exercise_level-5 < 0:
+        exc_recommend = "Under average, need more."
+    else:
+        exc_recommend = "Keep it up!"
 
     # What if Q2
     left_column, middle_column, right_column = st.columns(3)
@@ -161,7 +166,7 @@ if selected == "Model":
     st.subheader("**:blue[Recommendation/Prediction:]**")
     
     if today_water>0:
-        st.write(f"**{str(round(int(today_water),0))}** cups left for today.")
+        st.write(f"**{str(round((today_water/100),0))}** cups ({round(today_water, 0)}ml) left for today.")
     if percentage >= 100:
         st.write("You drank enough water yesterday. Keep up the good work!")
     else:
@@ -173,3 +178,4 @@ if selected == "Model":
         else:
             st.write(f"You may experience: **fatigue**.")
         st.write(f"Try to drink **{int(extra_needed)}** cups of water today to compensate.")
+        st.write(f"Exercise recommendation: **{exc_recommend}**")
