@@ -96,6 +96,7 @@ if selected == "Model":
 
     water_goal = water_simulation()
     water_drank = get_water_drank()
+    percentage_goal_reached = [round(100 * wd / wg, 0) for wd, wg in zip(water_drank, water_goal)]
 
 
     # Graphing of model: Results of what if Q1 & Q2
@@ -104,15 +105,19 @@ if selected == "Model":
     wd_colours = ["rgba(0, 188, 212, 1)" if i == today else "rgba(0, 188, 212, 0.5)" for i in days]
     wg_colours = ["rgba(33, 150, 243, 1)" if i == today else "rgba(33, 150, 243, 0.5)" for i in days]
 
-    fig.add_trace(go.Bar(x=days, y=water_drank, name='Water Drank', marker=dict(color=wd_colours)))
-    fig.add_trace(go.Bar(x=days, y=water_goal, name='Water Goal', marker=dict(color=wg_colours)))
+    fig.add_trace(go.Bar(x=days, y=water_drank, name='Water Drank', marker=dict(color=wd_colours), yaxis='y'))
+    fig.add_trace(go.Bar(x=days, y=water_goal, name='Water Goal', marker=dict(color=wg_colours), yaxis='y'))
+    fig.add_trace(go.Scatter(x=days, y=percentage_goal_reached, mode='markers+lines', name='% of Goal', marker_color='white', yaxis='y2'))
 
     fig.update_layout(
         title='Water Consumption',
         xaxis=dict(title='Days'),
         yaxis=dict(title='Water (ml)'),
+        yaxis2=dict(title='Percentage (%)', overlaying='y', side='right', range=[0, 100]),
         barmode='group',
-        hoverlabel=dict(font=dict(color='white'))
+        hoverlabel=dict(font=dict(color='white')),
+        legend=dict(orientation="h"),
+        height = 600
     )
 
     st.plotly_chart(fig)
@@ -120,7 +125,6 @@ if selected == "Model":
     data = []
     res = db.fetch()
     data_full = res.items
-    print(data_full)
     for entry in data_full:
         if entry['key'].lower() == today.lower():
             data.append(entry)
@@ -140,7 +144,7 @@ if selected == "Model":
     today_water = water_goal[today_index] - water_drank[today_index]
 
     if exercise_level-5 < 0:
-        exc_recommend = "Under average, need more."
+        exc_recommend = "Under average, need to do more exercise."
     else:
         exc_recommend = "Keep it up!"
 
@@ -166,16 +170,17 @@ if selected == "Model":
     st.subheader("**:blue[Recommendation/Prediction:]**")
     
     if today_water>0:
-        st.write(f"**{str(round((today_water/100),0))}** cups ({round(today_water, 0)}ml) left for today.")
+        st.write(f"**{int(round((today_water/100),0))}** cups (:blue[{round(today_water, 0)}ml]) left for today. So far **{percentage_goal_reached[today_index]}%** of todays goal was reached.")
     if percentage >= 100:
         st.write("You drank enough water yesterday. Keep up the good work!")
     else:
         st.write(f"You drank only **{percentage}%** of your daily goal yesterday.")
         if percentage >= 75:
-            st.write(f"You might experience: **Slight dehydration**.")
+            st.write(f"You might experience: :blue[**Slight dehydration**].")
         elif percentage >= 50:
-            st.write(f"You might experience: **tiredness**.")
+            st.write(f"You might experience: :blue[**tiredness**].")
         else:
-            st.write(f"You may experience: **fatigue**.")
+            st.write(f"You may experience: :blue[**fatigue**].")
+
         st.write(f"Try to drink **{int(extra_needed)}** cups of water today to compensate.")
-        st.write(f"Exercise recommendation: **{exc_recommend}**")
+        st.write(f"Exercise recommendation: **:blue[{exc_recommend}]**")
