@@ -15,8 +15,8 @@ db = deta.Base("hydration-system")
 
 # The following functions are used by app.py, and are kept in a seperate file for organisation
 
-def insert_period(day, intensity_value, personal_data, diet_data, default_temp, init_water_drank):
-    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data, "Temperature": default_temp, "Water Drank": init_water_drank})
+def insert_period(day, intensity_value, personal_data, diet_data, default_temp, init_water_drank, gender_value):
+    return db.put({"key": day, "Exercise Intensity": intensity_value, "Personals": personal_data, "Diet": diet_data, "Temperature": default_temp, "Water Drank": init_water_drank, "Gender": gender_value})
 
 def fetch_all_periods():
     res = db.fetch()
@@ -59,6 +59,7 @@ def water_simulation():
         # Inputs
         env_temp = data[0]['Temperature'] # degrees Celsius
         exercise_level = data[0]['Exercise Intensity']
+        gender = data[0]['Gender']
         age = data[0]['Personals']['Age'] # years
         height = data[0]['Personals']['Height'] # cm
         weight = data[0]['Personals']['Weight'] # kg
@@ -70,7 +71,10 @@ def water_simulation():
         # Calculations with Validated parameters (note: already validated in app.py)
 
         # BMR using Harris-Benedict equation
-        BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
+        if gender == "Male":
+            BMR = 66.5 + (13.75 * weight) + (5.003 * height) - (6.75 * age)
+        elif gender == "Female":
+            BMR = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age)
         sweating = AVG_SWEAT_RATE * int(env_temp) * 24
 
         total_fluid_intake = (BMR * 0.5)  + URINE_OUTPUT + (daily_fiber / 10) * FIBER_MULTIPLIER * 1000 + (salt_intake / 5) * SALT_MULTIPLIER * 1000 - (caffeine_intake / 100) * CAFFEINE_MULTIPLIER * 1000 + sweating
