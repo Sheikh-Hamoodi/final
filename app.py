@@ -32,6 +32,7 @@ day = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sund
 exercise = [i for i in range(1,11)]
 personals = ["Height", "Weight", "Age"]
 diets = ["Salt", "Fibre", "Caffeine"]
+genders = ["Male", "Female"]
 
 # Fetching database
 def get_all_periods():
@@ -51,9 +52,10 @@ selected = option_menu(
 if selected == "Data Entry":
     st.header(f"Data Entry")
     with st.form("entry_form", clear_on_submit=True):
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         col1.selectbox("Select Day:", day, key="days")
-        col2.selectbox("Select Exercise intensity (1-10):", exercise, key="intensity")
+        col2.selectbox("Select Exercise intensity:", exercise, key="intensity")
+        col3.selectbox("Select Gender:", genders, key="gneder")
 
         "---"
         with st.expander("Personal Specifications"):
@@ -69,15 +71,15 @@ if selected == "Data Entry":
         if submitted:
             day_value = st.session_state["days"]
             intensity_value = st.session_state["intensity"]
+            gender_value = st.session_state["gneder"]
             personal_data = {item: st.session_state[f"{item}_{i}"] for i, item in enumerate(personals)}
             diet_data = {diet: st.session_state[f"{diet}_{j}"] for j, diet in enumerate(diets)}
             default_temp = 25
             init_water_drank = 0
-            values = [day_value, intensity_value, personal_data, diet_data]
 
             # Validation
             if all(isinstance(value, (float, int)) for value in [intensity_value] + list(personal_data.values()) + list(diet_data.values())):
-                db.insert_period(day_value, intensity_value, personal_data, diet_data, default_temp, init_water_drank)
+                db.insert_period(day_value, intensity_value, personal_data, diet_data, default_temp, init_water_drank, gender_value)
                 st.success("Data saved!")
             else:
                 st.error("Error: Incorrect format.")
