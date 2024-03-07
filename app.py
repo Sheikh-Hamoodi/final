@@ -137,13 +137,20 @@ if selected == "Model":
     caffeine_intake = data[0]['Diet']['Caffeine']
     age = data[0]['Personals']['Age']
     exercise_level = data[0]['Exercise Intensity']
-
-    age_group = "children" if age <= 12 else "adolescents" if age <= 18 else "adults"
-    recommendations = {"children": 45, "adolescents": 85, "adults": 400}
+    
+    if age <= 12:
+        age_recommendations = 45
+    elif age <= 18:
+        age_recommendations = 85
+    else:
+        age_recommendations = 400
 
     water_deviation = water_drank[today_index] - water_drank[today_index-1]
-    caffeine_deviation = caffeine_intake - recommendations[age_group]
+    caffeine_deviation = caffeine_intake - age_recommendations
     today_water = water_goal[today_index] - water_drank[today_index]
+    yesterday_difference = water_drank[today_index-1] - water_goal[today_index-1]
+    percentage = round((water_drank[today_index-1] / water_goal[today_index-1]) * 100, 0)
+    extra_needed = round(abs(yesterday_difference)/100, 0)
 
     if exercise_level-5 < 0:
         exc_recommend = "Under average, need to do more exercise."
@@ -164,15 +171,11 @@ if selected == "Model":
         st.subheader("**:blue[Excercise:]**")
         st.metric(label="excercise", value=f"{exercise_level}/10", label_visibility="collapsed", delta=f"{exercise_level-5} from average (5)")
 
-    yesterday_difference = water_drank[today_index-1] - water_goal[today_index-1]
-    percentage = round((water_drank[today_index-1] / water_goal[today_index-1]) * 100, 0)
-    extra_needed = round(abs(yesterday_difference)/100, 0)
-
     
     st.subheader("**:blue[Recommendation/Prediction:]**")
     
     if today_water>0:
-        st.write(f"**{int(round((today_water/100),0))}** cups (:blue[{round(today_water, 0)}ml]) left for today. So far **{percentage_goal_reached[today_index]}%** of todays goal was reached.")
+        st.write(f"**{round((today_water/100),0)}** cups (:blue[{round(today_water, 0)}ml]) left for today. So far **{percentage_goal_reached[today_index]}%** of todays goal was reached.")
     if percentage >= 100:
         st.write("You drank enough water yesterday. Keep up the good work!")
     else:
